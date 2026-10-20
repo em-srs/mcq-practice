@@ -1,0 +1,18 @@
+{
+  "name": "Grinder \u2014 Placement Practice",
+  "short_name": "Grinder",
+  "description": "Your personal placement question practice room.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1122",
+  "theme_color": "#101426",
+  "icons": [
+    {
+      "src": "./assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

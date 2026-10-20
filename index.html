@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8faff">
+  <meta name="description" content="Your personal placement question practice room.">
+  <title>Grinder — Focused Assessment</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" id="homeLink"><span class="brand-mark">G</span><span>Grinder</span></a>
+      <div class="top-actions">
+        <span id="onlineStatus" class="status-pill"><span class="status-dot"></span> Online</span>
+        <button id="themeBtn" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">◐</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="dashboardView">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">PLACEMENT PREP · ASSESSMENT CENTRE</p>
+            <h1>Ready for your next <span>assessment?</span></h1>
+            <p class="subtitle">Build accuracy and speed with focused practice sets and timed test mode.</p>
+          </div>
+          <div class="hero-stat"><strong id="totalQuestions">0</strong><span>questions loaded</span></div>
+        </div>
+
+        <div class="toolbar">
+          <label class="searchbox"><span>⌕</span><input id="searchInput" type="search" placeholder="Search subjects or topics…"></label>
+          <button class="btn btn-primary" id="importBtn">＋ Import question JSON</button>
+          <button class="btn btn-secondary" id="exportBtn">Export backup ↓</button>
+          <input type="file" id="fileInput" accept=".json,application/json" hidden>
+        </div>
+        <div id="notice" class="notice" role="status" hidden></div>
+
+        <div class="section-heading"><div><h2>Practice library</h2><p>Choose a subject or question set to begin</p></div><span id="subjectCount" class="count-pill">0 sets</span></div>
+        <div id="subjectsGrid" class="subject-grid"></div>
+
+        <section class="quick-panel">
+          <div><p class="eyebrow">QUICK START</p><h2>Small sessions. Stronger results.</h2><p class="muted">Keep your preparation consistent with a mixed practice session or a review of previous mistakes.</p></div>
+          <div class="quick-actions">
+            <button class="btn btn-primary" id="mixedBtn">Start practice session <span>→</span></button>
+            <button class="btn btn-secondary" id="createTestBtn">Create mock test <span>↗</span></button>
+            <button class="btn btn-secondary" id="mistakesBtn">Review mistakes <span>↗</span></button>
+          </div>
+        </section>
+        <p class="footnote">Your imported questions and progress are stored in this browser. Use Export backup before switching devices.</p>
+      </section>
+
+      <section id="practiceView" hidden>
+        <div class="practice-top">
+          <button class="text-btn" id="backBtn">← Dashboard</button>
+          <div class="session-meta"><span id="sessionName">Practice session</span><span id="sessionCounter">Question 1 of 10</span></div>
+          <button class="btn btn-secondary btn-small" id="endBtn">Finish</button>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+        <div id="testTimerBar" class="test-timer-bar" hidden><span id="testTimerLabel">Time remaining</span><strong id="testTimer">00:00</strong></div>
+        <div class="practice-layout">
+          <section class="question-panel">
+            <div class="question-meta"><span id="topicPill" class="topic-pill">Topic</span><button id="bookmarkBtn" class="bookmark-btn" title="Bookmark question">☆ <span>Save</span></button></div>
+            <div id="questionText" class="question-text"></div>
+            <div id="optionsList" class="options-list"></div>
+            <div id="feedback" class="feedback" hidden></div>
+            <div class="question-controls">
+              <button class="btn btn-secondary" id="prevBtn">← Previous</button>
+              <span id="answeredLabel" class="muted small-text">Choose an answer</span>
+              <button class="btn btn-primary" id="nextBtn">Next question →</button>
+            </div>
+          </section>
+          <aside class="question-sidebar">
+            <div class="side-card"><p class="eyebrow">SESSION</p><div class="side-number" id="sideProgress">0/10</div><p class="muted">answered</p><div class="mini-track"><div id="sideProgressBar"></div></div></div>
+            <div class="side-card"><p class="eyebrow">QUESTION MAP</p><div id="questionMap" class="question-map"></div><p id="questionMapHint" class="muted small-text">Tap a number to jump.</p></div>
+            <div class="side-card"><p class="eyebrow">SHORTCUT</p><p class="muted small-text">On laptop, use the question map to jump between questions. Your answers are saved automatically on this device.</p></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="resultsView" hidden>
+        <div class="results-wrap">
+          <p class="eyebrow">SESSION COMPLETE</p><h1>Nice work. <span>Keep the streak going.</span></h1>
+          <div class="score-card"><div class="score-ring"><strong id="scorePercent">0%</strong></div><div><p class="muted">Your score</p><h2 id="scoreSummary">0 out of 0 correct</h2><p id="scoreMessage" class="muted"></p></div></div>
+          <div class="result-stats"><div><strong id="correctCount">0</strong><span>Correct</span></div><div><strong id="wrongCount">0</strong><span>Incorrect</span></div><div><strong id="skippedCount">0</strong><span>Skipped</span></div></div>
+          <div class="test-result-chart"><div id="resultPie" class="result-pie"><span id="pieTotal">0</span></div><div class="pie-legend"><span><i class="pie-dot correct-dot"></i> Correct</span><span><i class="pie-dot wrong-dot"></i> Wrong</span><span><i class="pie-dot skip-dot"></i> Skipped</span></div></div>
+          <div class="results-actions"><button class="btn btn-primary" id="retryWrongBtn">Practise incorrect answers</button><button class="btn btn-secondary" id="dashboardBtn">Back to dashboard</button></div>
+          <div class="review-list" id="reviewList"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="modalBackdrop" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <p class="eyebrow">CUSTOMISE SESSION</p><h2 id="modalTitle">Start practice</h2>
+      <p id="modalDescription" class="muted">Choose how you want to practise.</p>
+      <label class="field-label" for="modeSelect">Practice mode</label>
+      <select id="modeSelect"><option value="learn">Practice with explanations</option><option value="test">Test mode (answers at the end)</option></select>
+      <label class="field-label" for="amountSelect">Number of questions</label>
+      <select id="amountSelect"><option value="10">10 questions</option><option value="20">20 questions</option><option value="30">30 questions</option><option value="50">50 questions</option><option value="all">All available questions</option></select>
+      <label class="check-row"><input type="checkbox" id="shuffleCheck" checked> Shuffle questions</label>
+      <div id="mockTestFields" hidden>
+        <label class="field-label">Choose subjects</label><div id="subjectChoices" class="subject-choices"></div>
+        <label class="field-label" for="testQuestionCount">Questions in test</label><select id="testQuestionCount"><option value="20">20 questions</option><option value="30">30 questions</option><option value="50">50 questions</option><option value="75">75 questions</option><option value="100">100 questions</option><option value="all">All available</option></select>
+        <label class="field-label" for="timeMode">Timing mode</label><select id="timeMode"><option value="total">Total test time</option><option value="per-question">Time per question</option><option value="none">No timer</option></select>
+        <label class="field-label" for="timeAmount">Minutes</label><input id="timeAmount" type="number" min="1" max="300" value="30">
+        <p class="muted small-text">Mock tests run in strict order. You can select an answer or skip; you cannot go back or jump ahead.</p>
+      </div>
+      <button id="startSessionBtn" class="btn btn-primary btn-full">Start practice →</button>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="./question-banks.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
